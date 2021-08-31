@@ -1,0 +1,54 @@
+{% extends 'store/root.html' %}
+{% load bootstrap %}
+{% block title %} Register {% endblock %}
+{% block content %}
+
+
+  <!-- Background image -->
+  <div id="intro" class="bg-image shadow-2-strong">
+    <div class="mask d-flex align-items-center h-100" style="background-color: rgba(0, 0, 0, 0.8);">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-xl-5 col-md-8">
+            <div class="card">
+            <div class="card-body">
+            <div class="mt-1 pt-2">
+              {% if messages %}
+                  {% for message in messages %}
+                  <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  {% endfor %}
+              {% endif %}
+              {% if request.user.is_authenticated %}
+              <div class="card">
+                <div class="card-body">
+                  <p>You are already logged in.</p>
+                  <a href="{% url 'store' %}" type="button" class="btn btn-success btn-rounded"><i class="fas fa-arrow-circle-left ml-2"></i> Home <span class="ml-1"></span></a>
+                </div>
+              </div>
+              {% else %}
+            
+            <form method="POST">
+                {% csrf_token %}
+                {{ form|bootstrap }}
+                {{form.errors}}
+                <br/>
+                <input class="btn btn-secondary" type="Submit" name="Create Customer">
+            </form>
+                </div>
+            </div>
+            {% endif %}
+            </div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Background image -->
+{% endblock content %}

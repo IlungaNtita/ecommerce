@@ -1,0 +1,94 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% load bootstrap %}
+{% block content %}
+      <!-- Navbar -->
+		<nav class="navbar navbar-expand-lg bg-light navbar-light ">
+		<!-- Container wrapper -->
+		<div class="container-fluid">
+
+			
+			<button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<i class="fas fa-bars"></i>
+			</button>
+
+			<!-- Collapsible wrapper -->
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<form method='POST'>
+			{% csrf_token %}
+			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+				<!-- Dropdown -->
+				<li class="nav-item ml-5">
+					{{form.name|bootstrap}}
+				</li>
+				<li class="nav-item ml-5 mt-4">
+					<button type='submit' class="btn btn-outline-secondary">Search</button>
+				</li>
+
+			</ul>
+				
+
+			</form>
+
+			</div>
+		</div>
+		<!-- Container wrapper -->
+		</nav>
+	  <!-- Navbar -->
+
+	<div class="row">
+		{% for product in users %}
+		<div class="col-lg-4">
+			<a href="{{ product.get_absolute_url }}">
+			<img class="thumbnail" src="{{product.imageURL}}">
+			</a>
+			<div class="box-element product">
+				<h6><strong>{{product.name}}</strong></h6>
+				<hr>
+
+				<button data-product="{{product.id}}" data-action="add" class="btn btn-outline-secondary add-btn update-cart">Add to Cart</button>
+				
+				<a class="btn btn-outline-success" href="{{ product.get_absolute_url }}">View</a>
+				<h4 style="display: inline-block; float: right"><strong>${{product.price|floatformat:2}}</strong></h4>
+
+			</div>
+		</div>
+		<br>
+		{% endfor %}
+	</div>
+	<br/>
+	{% if users.has_other_pages %}
+	<nav aria-label="Page navigation example">
+		<ul class="pagination justify-content-center">
+		{% if users.has_previous %}
+		  <li class="page-item">
+			<a class="page-link" href="?page={{ users.previous_page_number }}" aria-label="Previous">
+			  <span aria-hidden="true">&laquo;</span>
+			</a>
+		  </li>
+		  {% else %}
+		  <li class="page-item disabled"><a class="page-link disabled">&laquo;</a></li>
+		  {% endif %}
+		  {% for i in users.paginator.page_range %}
+		  {% if users.number == i %}
+		  <li class="page-item active"><a class="page-link">{{i}}</a></li>
+		  {% else %}
+		  <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+		  {% endif %}
+		  {% endfor %}
+		  {% if users.has_next %}
+			
+		  <li class="page-item">
+			<a class="page-link" href="?page={{ users.next_page_number }}" aria-label="Next">
+			  <span aria-hidden="true">&raquo;</span>
+			</a>
+		 </li>
+			{% else %}
+			<li class="page-item disabled"><a class="page-link disabled">&raquo;</a></li>
+			{% endif %}
+		</ul>
+	  </nav>
+	  {% endif %}
+
+{% endblock content %}
